@@ -7,6 +7,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,8 +52,13 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
                 in.close();
             }
 
-            JSONObject jsonObject = new JSONObject(flux);
-            Log.d("AsyncTask<<" , "temp = " + jsonObject.toString());
+            JSONObject jsonObject = new JSONObject(flux); // récupère le flux
+            JSONArray jsonRecordsArray = jsonObject.getJSONArray("records"); // récupère l'array records
+            JSONObject jsonAssociationObject = jsonRecordsArray.getJSONObject(0); // récupère la première association
+            JSONObject jsonFieldsObject = jsonAssociationObject.getJSONObject("fields"); // récupère l'objet fields
+            String title = jsonFieldsObject.getString("short_title"); // récupère le champ short_title de l'objet fields
+
+            Log.d("AsyncTask<<" , "temp = " + title);
 
         } catch (IOException e) {
             e.printStackTrace();
