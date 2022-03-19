@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class AssociationAdapter extends BaseAdapter {
@@ -47,8 +49,24 @@ public class AssociationAdapter extends BaseAdapter {
         ViewHolder holder = (ViewHolder) layoutItem.getTag();
         if(holder == null) {
             holder = new ViewHolder();
+            holder.city = (TextView) layoutItem.findViewById(R.id.textViewCity);
+            holder.address = (TextView) layoutItem.findViewById(R.id.textViewAddress);
+            holder.title = (TextView) layoutItem.findViewById(R.id.textViewTitle);
+            /*
+            holder.description = (TextView) layoutItem.findViewById(R.id.);
+            holder.postal_code = (TextView) layoutItem.findViewById(R.id.);
+            holder.region = (TextView) layoutItem.findViewById(R.id.);
+             */
             layoutItem.setTag(holder);
         }
+        holder.city.setText(list.get(i).getCity());
+        holder.address.setText(list.get(i).getAddress());
+        holder.title.setText(list.get(i).getTitle());
+        /*
+        holder.description.setText(list.get(i).getDescription());
+        holder.postal_code.setText(list.get(i).getPostal_code());
+        holder.region.setText(list.get(i).getRegion());
+        */
 
         return layoutItem;
     }
@@ -59,6 +77,12 @@ public class AssociationAdapter extends BaseAdapter {
     }
 
     private class ViewHolder{
+        public TextView city;
+        public TextView address;
+        public TextView title;
+        public TextView description;
+        public TextView postal_code;
+        public TextView region;
 
     }
 }

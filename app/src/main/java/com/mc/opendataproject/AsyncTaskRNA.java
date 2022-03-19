@@ -57,8 +57,13 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
             JSONObject jsonAssociationObject = jsonRecordsArray.getJSONObject(0); // récupère la première association
             JSONObject jsonFieldsObject = jsonAssociationObject.getJSONObject("fields"); // récupère l'objet fields
             String title = jsonFieldsObject.getString("short_title"); // récupère le champ short_title de l'objet fields
+            String city = jsonFieldsObject.getString("com_name_asso");
+            String address = jsonFieldsObject.getString("street_name_manager");
+            String postal_code = jsonFieldsObject.getString("pc_address_asso");
+            String region = jsonFieldsObject.getString("reg_name");
+            String description = jsonFieldsObject.getString("object");
 
-            Log.d("AsyncTask<<" , "temp = " + title);
+            list.add(new Association(city, address, title, description, postal_code, region));
 
         } catch (IOException e) {
             e.printStackTrace();

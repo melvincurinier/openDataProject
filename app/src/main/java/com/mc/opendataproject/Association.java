@@ -4,15 +4,19 @@ import java.io.Serializable;
 
 public class Association implements Serializable {
     private String city;
-    private String adress;
+    private String address;
     private String title;
     private String description;
+    private String postal_code;
+    private String region;
 
-    public Association(String city, String adress, String title, String description) {
+    public Association(String city, String address, String title, String description, String postal_code, String region) {
         this.city = city;
-        this.adress = adress;
+        this.address = address;
         this.title = title;
         this.description = description;
+        this.postal_code = postal_code;
+        this.region = region;
     }
 
     public String getCity() {
@@ -22,11 +26,11 @@ public class Association implements Serializable {
         this.city = city;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getTitle() {
@@ -41,5 +45,19 @@ public class Association implements Serializable {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPostal_code() {
+        return postal_code;
+    }
+    public void setPostal_code(String postal_code) {
+        this.postal_code = postal_code;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+    public void setRegion(String region) {
+        this.region = region;
     }
 }
