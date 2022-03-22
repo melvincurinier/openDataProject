@@ -52,19 +52,25 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
                 in.close();
             }
 
+            list.clear();
+
             JSONObject jsonObject = new JSONObject(flux); // récupère le flux
             JSONArray jsonRecordsArray = jsonObject.getJSONArray("records"); // récupère l'array records
-            JSONObject jsonAssociationObject = jsonRecordsArray.getJSONObject(0); // récupère la première association
-            JSONObject jsonFieldsObject = jsonAssociationObject.getJSONObject("fields"); // récupère l'objet fields
-            String title = jsonFieldsObject.getString("short_title"); // récupère le champ short_title de l'objet fields
-            String city = jsonFieldsObject.getString("com_name_asso");
-            String address = jsonFieldsObject.getString("street_name_manager");
-            String postal_code = jsonFieldsObject.getString("pc_address_asso");
-            String region = jsonFieldsObject.getString("reg_name");
-            String description = jsonFieldsObject.getString("object");
+            for(int i = 0; i<10; i++){
+                JSONObject jsonAssociationObject = jsonRecordsArray.getJSONObject(i); // récupère la première association
+                JSONObject jsonFieldsObject = jsonAssociationObject.getJSONObject("fields"); // récupère l'objet fields
+                String title = jsonFieldsObject.getString("short_title"); // récupère le champ short_title de l'objet fields
+                String city = jsonFieldsObject.getString("com_name_asso");
+                String address = jsonFieldsObject.getString("street_name_manager");
+                String postal_code = jsonFieldsObject.getString("pc_address_asso");
+                String region = jsonFieldsObject.getString("reg_name");
+                String description = jsonFieldsObject.getString("object");
+                JSONArray coord = jsonFieldsObject.getJSONArray("geo_point_2d");
+                double[] coordTemp = {coord.getDouble(0), coord.getDouble(1)};
 
-            list.add(new Association(city, address, title, description, postal_code, region));
-
+                list.add(new Association(city, address, title, description, postal_code, region, coordTemp));
+                Log.d("Coordonnées "+ title, coordTemp[0] + " " + coordTemp[1]);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             temp = "pb connexion";

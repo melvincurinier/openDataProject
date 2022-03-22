@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Association> list;
     private AssociationAdapter adapter;
 
+    public static String COORD = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Snackbar.make(lv, "Association", Snackbar.LENGTH_LONG).show();
+                Intent intentMap = new Intent(MainActivity.this,MapsActivity.class);
+                intentMap.putExtra(COORD, list.get(i).getCoord());
+                startActivity(intentMap);
             }
         });
     }

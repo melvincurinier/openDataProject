@@ -9,14 +9,16 @@ public class Association implements Serializable {
     private String description;
     private String postal_code;
     private String region;
+    private double[] coord;
 
-    public Association(String city, String address, String title, String description, String postal_code, String region) {
+    public Association(String city, String address, String title, String description, String postal_code, String region, double[] coord) {
         this.city = city;
         this.address = address;
         this.title = title;
         this.description = description;
         this.postal_code = postal_code;
         this.region = region;
+        this.coord = coord;
     }
 
     public String getCity() {
@@ -59,5 +61,12 @@ public class Association implements Serializable {
     }
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public double[] getCoord() {
+        return coord;
+    }
+    public void setCoord(double[] coord) {
+        this.coord = coord;
     }
 }
