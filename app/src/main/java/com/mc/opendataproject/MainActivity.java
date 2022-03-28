@@ -119,9 +119,24 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intentAssociation = new Intent(MainActivity.this,AssociationActivity.class);
+                intentAssociation.putExtra("titleX", list.get(i).getTitle());
+                intentAssociation.putExtra("descritionX", list.get(i).getDescription());
+                intentAssociation.putExtra("addressX", list.get(i).getAddress());
+                intentAssociation.putExtra("cityX", list.get(i).getCity());
+                intentAssociation.putExtra("postalcodeX", list.get(i).getPostal_code());
+                intentAssociation.putExtra("regionX", list.get(i).getRegion());
+                startActivity(intentAssociation);
+            }
+        });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentMap = new Intent(MainActivity.this,MapsActivity.class);
                 intentMap.putExtra(COORD, list.get(i).getCoord());
                 startActivity(intentMap);
+                return true;
             }
         });
     }
