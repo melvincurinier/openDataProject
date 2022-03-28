@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
 
     public static String COORD = null;
+    public static final String FILE_NAME = "saveFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +46,23 @@ public class MainActivity extends AppCompatActivity {
 
         lv = findViewById(R.id.list);
         btnRefresh = findViewById(R.id.btnRefresh);
-        list = new ArrayList<>();
-        context = this;
+        File file = new File(this.getFilesDir(), FILE_NAME);
+        if(!file.exists()){
+            Snackbar.make(lv, "Aucun fichier",Snackbar.LENGTH_LONG).show();
+        }
+        else{
+            try{
+                InputStream in = openFileInput(FILE_NAME);
+                ObjectInputStream oin = new ObjectInputStream(in);
+                list = (ArrayList<Association>) oin.readObject();
+                oin.close();
+            }
+            catch (ClassNotFoundException | IOException e){
+                Snackbar.make(lv, "Impossible de récupérer les données du fichier",Snackbar.LENGTH_LONG).show();
+            }
+        }
+        if (list == null) list = new ArrayList<>();
+        context = getApplicationContext();
         adapter = new AssociationAdapter(context, list);
         lv.setAdapter(adapter);
 

@@ -12,6 +12,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class AssociationAdapter extends BaseAdapter {
@@ -74,6 +77,18 @@ public class AssociationAdapter extends BaseAdapter {
     @Override
     public void notifyDataSetChanged(){
         super.notifyDataSetChanged();
+        try
+        {
+            OutputStream out = context.openFileOutput(MainActivity.FILE_NAME, Context.MODE_PRIVATE);
+            ObjectOutputStream oout = new ObjectOutputStream(out);
+            oout.writeObject(list);
+            oout.flush();
+            oout.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private class ViewHolder{
