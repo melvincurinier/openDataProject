@@ -19,8 +19,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btnRefresh;
     private ArrayList<Association> list;
     private AssociationAdapter adapter;
-
+/*
     public static String COORD = null;
+    public static String NOM = null;
+    public static  String DESCRIPTION = null;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intentMap = new Intent(MainActivity.this,MapsActivity.class);
-                intentMap.putExtra(COORD, list.get(i).getCoord());
+
+                intentMap.putExtra("titre",list.get(i).getTitle().toString());
+                intentMap.putExtra("description",list.get(i).getDescription());
+                intentMap.putExtra("coord", list.get(i).getCoord());
+
+
                 startActivity(intentMap);
             }
         });

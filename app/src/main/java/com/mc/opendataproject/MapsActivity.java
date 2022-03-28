@@ -1,14 +1,20 @@
 package com.mc.opendataproject;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mc.opendataproject.databinding.ActivityMapsBinding;
 
@@ -17,6 +23,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private double[] coord;
+    private String titre;
+    private String desciption;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +33,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        coord = getIntent().getDoubleArrayExtra(MainActivity.COORD);
+        coord = getIntent().getDoubleArrayExtra("coord");
+        titre = getIntent().getStringExtra("titre");
+        desciption = getIntent().getStringExtra("description");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -48,12 +59,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng coordAssociation = new LatLng(coord[0], coord[1]);
         // creation marker
 
-        //mMap.addMarker(new MarkerOptions().position(coordAssociation).title("Marker"));
-        // il faut au transmettre le nom du lieu en plus des coordonner maybe pour perso le "Marker"
-        mMap.addMarker(new MarkerOptions().position(coordAssociation).title("Marker"));
-       // mMap.moveCamera(CameraUpdateFactory.newLatLng(coordAssociation));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(coordAssociation));
+        MarkerOptions options = new MarkerOptions();
+        options.position(coordAssociation);
 
+        options.title(titre);
+        options.snippet(desciption);
+        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+
+        mMap.addMarker(options);
+
+
+        // Zoom sur le marker !
        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordAssociation,15f));
     }
+
+
+
+
 }
