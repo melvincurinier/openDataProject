@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -19,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnRefresh;
     private ArrayList<Association> list;
     private AssociationAdapter adapter;
+    private int incr = 0;
+    private String start = Integer.toString(incr);
 
     public static String COORD = null;
 
@@ -36,7 +40,40 @@ public class MainActivity extends AppCompatActivity {
         btnRefresh.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                new AsyncTaskRNA().execute(list, adapter);
+                list.clear();
+                incr = 0;
+                start = Integer.toString(incr);
+                new AsyncTaskRNA().execute(list, adapter, start);
+            }
+        });
+
+        lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int currentVisibleItemCount;
+            private int currentScrollState;
+            private int currentFirstVisibleItem;
+            private int totalItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                this.currentScrollState = scrollState;
+                this.isScrollCompleted();
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                this.currentFirstVisibleItem = firstVisibleItem;
+                this.currentVisibleItemCount = visibleItemCount;
+                this.totalItem = totalItemCount;
+            }
+
+            private void isScrollCompleted() {
+                if (totalItem - currentFirstVisibleItem == currentVisibleItemCount
+                        && this.currentScrollState == SCROLL_STATE_IDLE) {
+                    incr += 10;
+                    start = Integer.toString(incr);
+                    new AsyncTaskRNA().execute(list, adapter, start);
+                }
             }
         });
 

@@ -25,8 +25,8 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
     private String format;
     private AssociationAdapter adapter;
     private ArrayList<Association> list;
+    private String count;
 
-    public static final String API_LINK = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=ref-france-association-repertoire-national&q=&facet=management&facet=nature&facet=group&facet=ispublic&facet=position&facet=dep_name&facet=epci_name&facet=reg_name&facet=com_arm_area_code";
 
     @Override
     protected String doInBackground(Object... params) {
@@ -35,7 +35,9 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
 
         list = (ArrayList<Association>) params[0];
         adapter = (AssociationAdapter) params[1];
+        count = (String) params[2];
 
+        String API_LINK = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=ref-france-association-repertoire-national&q=&start="+count+"&facet=management&facet=nature&facet=group&facet=ispublic&facet=position&facet=dep_name&facet=epci_name&facet=reg_name&facet=com_arm_area_code";
         URL url = null;
         HttpURLConnection urlConnection = null;
         String flux = "";
@@ -51,8 +53,6 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
                 flux = stringBuilder.toString();
                 in.close();
             }
-
-            list.clear();
 
             JSONObject jsonObject = new JSONObject(flux); // récupère le flux
             JSONArray jsonRecordsArray = jsonObject.getJSONArray("records"); // récupère l'array records
