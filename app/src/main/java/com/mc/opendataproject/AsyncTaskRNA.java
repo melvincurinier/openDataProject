@@ -26,6 +26,7 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
     private AssociationAdapter adapter;
     private ArrayList<Association> list;
     private String count;
+    private String filtre;
 
 
     @Override
@@ -36,8 +37,9 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
         list = (ArrayList<Association>) params[0];
         adapter = (AssociationAdapter) params[1];
         count = (String) params[2];
+        filtre = (String) params[3];
 
-        String API_LINK = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=ref-france-association-repertoire-national&q=&start="+count+"&facet=management&facet=nature&facet=group&facet=ispublic&facet=position&facet=dep_name&facet=epci_name&facet=reg_name&facet=com_arm_area_code";
+        String API_LINK = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=ref-france-association-repertoire-national&q="+filtre+"&start="+count+"&facet=management&facet=nature&facet=group&facet=ispublic&facet=position&facet=dep_name&facet=epci_name&facet=reg_name&facet=com_arm_area_code";
         URL url = null;
         HttpURLConnection urlConnection = null;
         String flux = "";
@@ -59,14 +61,49 @@ public class AsyncTaskRNA extends AsyncTask<Object, Void, String> {
             for(int i = 0; i<10; i++){
                 JSONObject jsonAssociationObject = jsonRecordsArray.getJSONObject(i); // récupère la première association
                 JSONObject jsonFieldsObject = jsonAssociationObject.getJSONObject("fields"); // récupère l'objet fields
-                String title = jsonFieldsObject.getString("short_title"); // récupère le champ short_title de l'objet fields
-                String city = jsonFieldsObject.getString("com_name_asso");
-                String address = jsonFieldsObject.getString("street_name_manager");
-                String postal_code = jsonFieldsObject.getString("pc_address_asso");
-                String region = jsonFieldsObject.getString("reg_name");
-                String description = jsonFieldsObject.getString("object");
-                JSONArray coord = jsonFieldsObject.getJSONArray("geo_point_2d");
-                double[] coordTemp = {coord.getDouble(0), coord.getDouble(1)};
+                String title;
+                String city;
+                String address;
+                String postal_code;
+                String region;
+                String description;
+                double[] coordTemp;
+                try {
+                    title = jsonFieldsObject.getString("short_title");
+                } catch (JSONException e){
+                    title = "Non renseigné";
+                }
+                try {
+                    city = jsonFieldsObject.getString("com_name_asso");
+                } catch (JSONException e){
+                    city = "Non renseigné";
+                }
+                try{
+                    address = jsonFieldsObject.getString("street_name_manager");
+                } catch (JSONException e){
+                    address = "Non renseigné";
+                }
+                try{
+                    postal_code = jsonFieldsObject.getString("pc_address_asso");
+                } catch (JSONException e){
+                    postal_code = "Non renseigné";
+                }
+                try{
+                    region = jsonFieldsObject.getString("reg_name");
+                } catch (JSONException e){
+                    region = "Non renseigné";
+                }
+                try{
+                    description = jsonFieldsObject.getString("object");
+                } catch (JSONException e){
+                    description = "Non renseigné";
+                }
+                try {
+                    JSONArray coord = jsonFieldsObject.getJSONArray("geo_point_2d");
+                    coordTemp = new double[]{coord.getDouble(0), coord.getDouble(1)};
+                } catch (JSONException e){
+                    coordTemp = new double[]{0.0, 0.0};
+                }
 
                 list.add(new Association(city, address, title, description, postal_code, region, coordTemp));
                 Log.d("Coordonnées "+ title, coordTemp[0] + " " + coordTemp[1]);

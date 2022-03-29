@@ -15,8 +15,10 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -32,16 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView lv;
     private Button btnRefresh;
     private ArrayList<Association> list;
-    private AssociationAdapter adapter;/*
-    Context context = getActivity();
-    SharedPreferences sharedPref = context.getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-*/
-/*
-    public static String COORD = null;
-    public static String NOM = null;
-    public static  String DESCRIPTION = null;
-    */
+    private AssociationAdapter adapter;
+    private EditText filtreTv;
 
     private int incr = 0;
     private String start = Integer.toString(incr);
@@ -55,13 +49,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        NavHostFragment navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
-        NavigationView navView = findViewById(R.id.nav_view);
-        NavigationUI.setupWithNavController(navView, navController);
 
         lv = findViewById(R.id.list);
         btnRefresh = findViewById(R.id.btnRefresh);
+        filtreTv = findViewById(R.id.editTextFiltre);
+
         File file = new File(this.getFilesDir(), FILE_NAME);
         if(!file.exists()){
             Snackbar.make(lv, "Aucun fichier",Snackbar.LENGTH_LONG).show();
@@ -89,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     list.clear();
                     incr = 0;
                     start = Integer.toString(incr);
-                    new AsyncTaskRNA().execute(list, adapter, start);
+                    new AsyncTaskRNA().execute(list, adapter, start, filtreTv.getText().toString());
                 } else {
                     Toast toast = Toast.makeText(context, "No connection", Toast.LENGTH_SHORT);
                     toast.show();
@@ -123,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                             && this.currentScrollState == SCROLL_STATE_IDLE) {
                         incr += 10;
                         start = Integer.toString(incr);
-                        new AsyncTaskRNA().execute(list, adapter, start);
+                        new AsyncTaskRNA().execute(list, adapter, start, filtreTv.getText().toString());
                     }
                 } else {
                     Toast toast = Toast.makeText(context, "No connection", Toast.LENGTH_SHORT);
